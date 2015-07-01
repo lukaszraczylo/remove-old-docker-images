@@ -2,7 +2,6 @@
 # Cleaning docker images, with bits of charm and magic
 require 'chronic'
 require 'docker'
-require 'awesome_print'
 
 ENV['DOCKER_URL'] = 'unix:///var/run/docker.sock'
 Excon.defaults[:ssl_verify_peer] = false
@@ -34,7 +33,7 @@ class DockerCleaner
         img[1].each do |i|
    if i['created'].to_i < Chronic.parse("#{KEEP_IMAGES_FOR} ago").to_i
      puts "Removing: #{Time.at(i['created']).strftime("%F").to_s} - #{img[0]}:#{i['version']}"
-     ap i['id']
+     puts i['id']
      image = Docker::Image.get(i['id'])
      image.remove
          end
